@@ -13,7 +13,14 @@ if [ -z "$UDID" ]; then
   UDID=$(xcrun xctrace list devices 2>/dev/null \
     | sed -n '/== Devices ==/,/== Devices Offline ==/p' \
     | grep -E '\([0-9]+\.[0-9.]+\) \([0-9A-F-]{20,}\)$' \
-    | head -1 | sed -E 's/.*\(([0-9A-F-]+)\)$/\1/')
+    | head -1 | sed -E 's/.*\(([0-9A-F-]+)\)$/\1/' || true)
+fi
+if [ -z "$UDID" ]; then
+  # xctrace can list a wirelessly paired iPhone as offline even though
+  # devicectl can still reach it, so fall back to devicectl.
+  UDID=$(xcrun devicectl list devices 2>/dev/null \
+    | grep -aE 'available.*physical' | grep -ai iphone \
+    | head -1 | grep -oE '[0-9A-F]{8}-[0-9A-F]{16}' || true)
 fi
 if [ -z "$UDID" ]; then
   echo "No connected iPhone found. Plug it in, unlock it and trust this Mac." >&2

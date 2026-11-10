@@ -17,7 +17,7 @@ export function buildViewerHtml(modelUrl: string, modelType: string | null): str
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <style>
-  html, body { margin: 0; height: 100%; background: #F5F7FA; overflow: hidden; touch-action: none; }
+  html, body { margin: 0; height: 100%; background: #F4F9FC; overflow: hidden; touch-action: none; }
   canvas { display: block; width: 100%; height: 100%; }
 </style>
 </head>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -13,7 +14,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthSession, describeAuthError, signIn } from '../services/AuthService';
-import { colors, radius, spacing } from '../theme';
+import { brand, colors, radius, spacing } from '../theme';
 
 interface Props {
   onSignedIn: (session: AuthSession) => void;
@@ -64,11 +65,17 @@ export function LoginScreen({ onSignedIn }: Props) {
           { paddingTop: insets.top + spacing.xl, paddingBottom: insets.bottom + spacing.xl },
         ]}
         keyboardShouldPersistTaps="handled">
-        <Text style={styles.wordmark} accessibilityRole="header">
-          WeldIQ
-        </Text>
+        <Image
+          source={require('../assets/betaflix-logo.png')}
+          style={styles.logo}
+          resizeMode="contain"
+          accessibilityRole="image"
+          accessibilityLabel="BetaFlix"
+        />
 
-        <Text style={styles.title}>Sign in to WeldIQ</Text>
+        <Text style={styles.title} accessibilityRole="header">
+          Sign in to WeldIQ
+        </Text>
         <Text style={styles.subtitle}>Welcome back. Pick up where you left off.</Text>
 
         <Text style={styles.label}>EMAIL</Text>
@@ -128,6 +135,12 @@ export function LoginScreen({ onSignedIn }: Props) {
           style={({ pressed }) => [styles.button, pressed && styles.buttonPressed, loading && styles.buttonBusy]}>
           {loading ? <ActivityIndicator color={login.onAccent} /> : <Text style={styles.buttonLabel}>Sign in</Text>}
         </Pressable>
+
+        <View style={styles.footer}>
+          <Text style={styles.poweredBy}>
+            Powered by <Text style={styles.poweredByBrand}>BetaFlix</Text>
+          </Text>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -136,9 +149,9 @@ export function LoginScreen({ onSignedIn }: Props) {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: login.bg },
   content: { flexGrow: 1, paddingHorizontal: spacing.xl, maxWidth: 480, width: '100%', alignSelf: 'center' },
-  wordmark: { color: login.text, fontSize: 24, fontWeight: '800', letterSpacing: -0.3, marginBottom: 40 },
-  title: { color: login.text, fontSize: 30, fontWeight: '700', letterSpacing: -0.5 },
-  subtitle: { color: login.muted, fontSize: 16, marginTop: spacing.sm, marginBottom: 32 },
+  logo: { width: 220, height: 115, alignSelf: 'center', marginTop: spacing.lg, marginBottom: 32 },
+  title: { color: login.text, fontSize: 28, fontWeight: '700', letterSpacing: -0.5, textAlign: 'center' },
+  subtitle: { color: login.muted, fontSize: 16, marginTop: spacing.sm, marginBottom: 32, textAlign: 'center' },
   label: { color: login.label, fontSize: 13, fontWeight: '700', letterSpacing: 0.8, marginBottom: spacing.sm },
   labelSpaced: { marginTop: spacing.xl },
   input: {
@@ -167,4 +180,7 @@ const styles = StyleSheet.create({
   buttonPressed: { backgroundColor: login.accentPressed },
   buttonBusy: { opacity: 0.7 },
   buttonLabel: { color: login.onAccent, fontSize: 18, fontWeight: '700' },
+  footer: { flexGrow: 1, justifyContent: 'flex-end', alignItems: 'center', paddingTop: 40 },
+  poweredBy: { color: login.muted, fontSize: 13 },
+  poweredByBrand: { color: brand.blue, fontWeight: '700' },
 });
